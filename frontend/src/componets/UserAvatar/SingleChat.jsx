@@ -95,6 +95,7 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
             }
         })
     })
+    console.log('notification', notification);
 
     const sendMessage = async(event) => {
         if(event.key === "Enter" && newMessage){
@@ -113,7 +114,7 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                     chatId: selectedChat._id,
                 },config);
 
-                console.log(data);
+                console.log('message sent');
                 socket.emit("new message", data);
                 setMessages([...messages, data])
             } catch (error) {
