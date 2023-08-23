@@ -42,9 +42,9 @@ if(process.env.NODE_ENV === 'production') {
 app.use(notFound)
 app.use(errorHandler)
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 6000
 
-const server = app.listen(5000, console.log(`server Started on port ${PORT}`));
+const server = app.listen(6000, console.log(`server Started on port ${PORT}`));
 
 const io = require('socket.io')(server, {
     pingTimeout: 60000,
