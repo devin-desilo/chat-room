@@ -47,12 +47,13 @@ const PORT = process.env.PORT || 5000
 
 const server = app.listen(5000, console.log(`server Started on port ${PORT}`));
 console.log('socket code start');
+console.log(server)
 const io = require('socket.io')(server, {
     pingTimeout: 60000
 });
 
 
-console.log('socket io');
+console.log('socket io', io);
 io.on("connection",  (socket) => {
     console.log("connected to socket.io");
 
@@ -87,5 +88,5 @@ io.on("connection",  (socket) => {
     })
 
 })
-
+console.log('a', io)
 console.log('socket code end -------');
