@@ -25,6 +25,7 @@ app.use('/api/message',messageRoutes);
 // Deplotment 
 const __dirname1 = path.resolve();
 if(process.env.NODE_ENV === 'production') {
+    console.log('in production');
     app.use(express.static(path.join(__dirname1, '/frontend/build')));
 
     app.get('*',(req, res) => {
@@ -45,15 +46,13 @@ app.use(errorHandler)
 const PORT = process.env.PORT || 5000
 
 const server = app.listen(5000, console.log(`server Started on port ${PORT}`));
-
+console.log('socket code start');
 const io = require('socket.io')(server, {
-    pingTimeout: 60000,
-    // cors:{
-    //     origin: "http://localhost:3000",
-    // },
+    pingTimeout: 60000
 });
 
 
+console.log('socket io');
 io.on("connection",  (socket) => {
     console.log("connected to socket.io");
 
@@ -88,3 +87,5 @@ io.on("connection",  (socket) => {
     })
 
 })
+
+console.log('socket code end -------');
