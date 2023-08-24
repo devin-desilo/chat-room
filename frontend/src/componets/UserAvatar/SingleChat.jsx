@@ -12,12 +12,11 @@ import Lottie from "lottie-react";
 import animationData from '../../animations/typing.json';
 
 
-const ENDPOINT = "http://localhost:5000";
+// const ENDPOINT = "http://localhost:5000";
 var socket , selectedChatCompare; 
 
 const SingleChat = ({fetchAgain, setFetchAgain}) => {
-    const {user, selectedChat, setSelectedChat ,  notification,
-        setNotification} = ChatState()
+    const {user, selectedChat, setSelectedChat ,  notification, setNotification} = ChatState()
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [newMessage, setNewMessage] = useState("");
@@ -66,7 +65,7 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
 
     
     useEffect(() =>{
-        socket = io(ENDPOINT);
+        socket = io();
         socket.emit("setup",user);
         socket.on('Connected',() => setSocketConnected(true))
         socket.on('typing', ()=>setIsTyping(true))
