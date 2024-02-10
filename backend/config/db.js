@@ -3,10 +3,7 @@ const colors = require("colors");
 
 const connectDB = async() => {
     try {
-        const conn = await mongoose.connect(process.env.MONGO_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        const conn = await mongoose.connect("mongodb+srv://Devin27:Devin@cluster0.p1ssovg.mongodb.net/chat");
 
         console.log(`mongo db connected : ${conn.connection.host}`.cyan.underline)
     } catch (error) {

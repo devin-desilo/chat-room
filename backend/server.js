@@ -1,5 +1,5 @@
 const express = require("express");
-const dotenv = require("dotenv");
+require("dotenv").config();
 const { chats } = require("./data/data");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
@@ -8,8 +8,6 @@ const messageRoutes = require("./routes/messageRoutes");
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const { Socket } = require("socket.io");
 const path = require('path')
-
-dotenv.config();
 
 
 connectDB()
