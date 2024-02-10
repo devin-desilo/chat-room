@@ -1,13 +1,13 @@
-const express =  require("express");
-const dotenv =  require("dotenv");
-const { chats } =  require("./data/data");
+const express = require("express");
+const dotenv = require("dotenv");
+const { chats } = require("./data/data");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
-const { notFound , errorHandler} =  require('./middleware/errorMiddleware');
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const { Socket } = require("socket.io");
-const  path = require('path')
+const path = require('path')
 
 dotenv.config();
 
@@ -19,33 +19,33 @@ app.use(express.json())
 
 
 app.use('/api/user', userRoutes);
-app.use('/api/chat',chatRoutes);
-app.use('/api/message',messageRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/message', messageRoutes);
 
-app.get('/test', function(req,res){
+app.get('/test', function (req, res) {
     var options = {
-       root: path.join(__dirname)
+        root: path.join(__dirname)
     }
-   
-    var fileName = 'index.html'; 
-   
+
+    var fileName = 'index.html';
+
     res.sendFile(fileName, options);
-   })
+})
 
 // Deplotment 
 const __dirname1 = path.resolve();
-if(process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
     // console.log('in production');
     app.use(express.static(path.join(__dirname1, '/frontend/build')));
 
-    app.get('*',(req, res) => {
-        res.sendFile(path.resolve(__dirname1,"frontend", "build", "index.html"))
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
     })
 } else {
-    app.get('/', (req,res) => {
+    app.get('/', (req, res) => {
         res.send("API iS RUNING.. fast")
-    } )
-    
+    })
+
 }
 // Deplotment 
 
@@ -53,42 +53,42 @@ if(process.env.NODE_ENV === 'production') {
 app.use(notFound)
 app.use(errorHandler)
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5002
 
-const server = app.listen(5000, console.log(`server Started on port ${PORT}`));
+const server = app.listen(PORT, console.log(`server Started on port ${PORT}`));
 // console.log('socket code start');
 // console.log(server)
 const io = require('socket.io')(server);
 
 
 // console.log('socket io', io);
-io.on("connection",  (socket) => {
+io.on("connection", (socket) => {
     console.log("connected to socket.io");
 
-    socket.on('setup', (userData)=> {
+    socket.on('setup', (userData) => {
         socket.join(userData._id);
         console.log(userData._id)
         socket.emit('Connected');
     });
 
 
-    socket.on('join chat', (room)=> {
+    socket.on('join chat', (room) => {
         socket.join(room);
         console.log("user joined room:" + room)
         // socket.emit('Connected');
     });
 
-    socket.on('typing', (room)=>socket.in(room).emit("typing"))
-    socket.on('stop typing', (room)=>socket.in(room).emit("stop typing"))
+    socket.on('typing', (room) => socket.in(room).emit("typing"))
+    socket.on('stop typing', (room) => socket.in(room).emit("stop typing"))
 
 
     socket.on('new message', (newMessageRecieved) => {
-        var chat  = newMessageRecieved.chat;
+        var chat = newMessageRecieved.chat;
 
-        if(!chat.users) return console.log('chat . Users Not Defind');
-        
+        if (!chat.users) return console.log('chat . Users Not Defind');
+
         chat.users.forEach(user => {
-            if(user._id == newMessageRecieved.sender._id) return;
+            if (user._id == newMessageRecieved.sender._id) return;
 
             socket.in(user._id).emit("message recieved", newMessageRecieved)
         });
